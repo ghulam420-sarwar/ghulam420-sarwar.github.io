@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ghulam Sarwar — Embedded Systems & Web Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#080810;
+  --bg2:#0e0e1a;
+  --bg3:#13131f;
+  --purple:#7c6ff7;
+  --pink:#e0507a;
+  --teal:#2dd4bf;
+  --amber:#f59e0b;
+  --text:#f0eeff;
+  --muted:#8884aa;
+  --border:#ffffff14;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;}
+
+/* noise overlay */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.4;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 4rem;display:flex;justify-content:space-between;align-items:center;background:rgba(8,8,16,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Space Mono',monospace;font-size:1rem;color:var(--teal);letter-spacing:2px;}
+.logo span{color:var(--purple);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.85rem;letter-spacing:1px;text-transform:uppercase;transition:color .3s;}
+.nav-links a:hover{color:var(--teal);}
+.nav-cta{background:var(--purple);color:#fff;padding:.5rem 1.4rem;border-radius:4px;font-size:.82rem;text-decoration:none;letter-spacing:1px;transition:background .3s;}
+.nav-cta:hover{background:var(--pink);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:0 4rem;position:relative;overflow:hidden;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%);}
+.hero-blob{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(124,111,247,.15) 0%,transparent 70%);top:50%;right:-100px;transform:translateY(-50%);animation:pulse 6s ease-in-out infinite;}
+.hero-blob2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(224,80,122,.1) 0%,transparent 70%);bottom:-100px;left:100px;animation:pulse 8s ease-in-out infinite reverse;}
+@keyframes pulse{0%,100%{transform:translateY(-50%) scale(1);}50%{transform:translateY(-50%) scale(1.1);}}
+.hero-content{position:relative;z-index:2;max-width:720px;}
+.hero-badge{display:inline-flex;align-items:center;gap:.6rem;background:rgba(124,111,247,.12);border:1px solid rgba(124,111,247,.3);padding:.4rem 1rem;border-radius:100px;font-size:.78rem;color:var(--purple);letter-spacing:1px;margin-bottom:2rem;animation:fadeUp .8s ease both;}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.hero h1{font-size:clamp(3rem,7vw,5.5rem);font-weight:800;line-height:1.05;margin-bottom:1.2rem;animation:fadeUp .8s .1s ease both;}
+.hero h1 .name{color:var(--text);}
+.hero h1 .accent{color:var(--purple);}
+.hero h1 .accent2{color:var(--teal);}
+.hero-sub{font-size:1.1rem;color:var(--muted);line-height:1.7;margin-bottom:2.5rem;max-width:520px;animation:fadeUp .8s .2s ease both;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:.7rem;margin-bottom:2.5rem;animation:fadeUp .8s .3s ease both;}
+.tag{background:var(--bg3);border:1px solid var(--border);padding:.35rem .9rem;border-radius:4px;font-size:.78rem;color:var(--muted);font-family:'Space Mono',monospace;}
+.hero-actions{display:flex;gap:1rem;animation:fadeUp .8s .4s ease both;}
+.btn-primary{background:var(--purple);color:#fff;padding:.8rem 2rem;border-radius:6px;text-decoration:none;font-size:.9rem;font-weight:600;letter-spacing:.5px;transition:all .3s;}
+.btn-primary:hover{background:var(--pink);transform:translateY(-2px);}
+.btn-outline{border:1px solid var(--border);color:var(--text);padding:.8rem 2rem;border-radius:6px;text-decoration:none;font-size:.9rem;font-weight:600;letter-spacing:.5px;transition:all .3s;}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal);}
+.hero-stats{position:absolute;right:4rem;bottom:4rem;display:flex;gap:3rem;animation:fadeUp .8s .5s ease both;}
+.stat-item{text-align:center;}
+.stat-num{font-size:2rem;font-weight:800;color:var(--purple);}
+.stat-label{font-size:.75rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+/* SECTION COMMON */
+section{padding:6rem 4rem;}
+.section-label{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:3px;text-transform:uppercase;margin-bottom:1rem;}
+.section-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-bottom:1rem;}
+.section-title span{color:var(--purple);}
+.section-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:560px;}
+
+/* SKILLS */
+.skills-section{background:var(--bg2);}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem;}
+.skill-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.8rem;transition:all .3s;position:relative;overflow:hidden;}
+.skill-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent,var(--purple));}
+.skill-card:hover{border-color:var(--accent,var(--purple));transform:translateY(-4px);}
+.skill-card.teal{--accent:var(--teal);}
+.skill-card.pink{--accent:var(--pink);}
+.skill-card.amber{--accent:var(--amber);}
+.skill-icon{font-size:2rem;margin-bottom:1rem;}
+.skill-card h3{font-size:1.1rem;font-weight:700;margin-bottom:.8rem;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem;}
+.skill-tag{background:rgba(255,255,255,.06);padding:.25rem .7rem;border-radius:4px;font-size:.72rem;color:var(--muted);font-family:'Space Mono',monospace;}
+
+/* PROJECTS */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5rem;margin-top:3rem;}
+.project-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .3s;cursor:pointer;}
+.project-card:hover{border-color:var(--purple);transform:translateY(-6px);}
+.project-header{padding:1.5rem 1.5rem 0;display:flex;justify-content:space-between;align-items:flex-start;}
+.project-num{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--purple);opacity:.6;}
+.project-links{display:flex;gap:.6rem;}
+.project-link{color:var(--muted);text-decoration:none;font-size:.8rem;background:var(--bg3);padding:.3rem .7rem;border-radius:4px;border:1px solid var(--border);transition:all .2s;}
+.project-link:hover{color:var(--teal);border-color:var(--teal);}
+.project-body{padding:1rem 1.5rem 1.5rem;}
+.project-icon{font-size:2.2rem;margin-bottom:.8rem;}
+.project-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.6rem;}
+.project-card p{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+.project-stack{display:flex;flex-wrap:wrap;gap:.4rem;}
+.stack-tag{background:rgba(124,111,247,.12);border:1px solid rgba(124,111,247,.2);padding:.2rem .6rem;border-radius:3px;font-size:.7rem;color:var(--purple);font-family:'Space Mono',monospace;}
+.stack-tag.teal{background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.2);color:var(--teal);}
+.stack-tag.pink{background:rgba(224,80,122,.1);border-color:rgba(224,80,122,.2);color:var(--pink);}
+.stack-tag.amber{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:var(--amber);}
+
+/* ACHIEVEMENTS */
+.achievements-section{background:var(--bg2);}
+.achievements-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:3rem;}
+.achievement-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;display:flex;align-items:flex-start;gap:1rem;transition:all .3s;}
+.achievement-card:hover{border-color:var(--amber);transform:translateY(-3px);}
+.achievement-icon{font-size:1.8rem;flex-shrink:0;}
+.achievement-card h4{font-size:.95rem;font-weight:700;margin-bottom:.4rem;}
+.achievement-card p{font-size:.82rem;color:var(--muted);line-height:1.5;}
+
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-top:3rem;}
+.service-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;transition:all .3s;position:relative;}
+.service-card:hover{transform:translateY(-4px);}
+.service-card.featured{border-color:var(--purple);background:linear-gradient(135deg,rgba(124,111,247,.08),var(--bg2));}
+.featured-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;padding:.3rem 1rem;border-radius:100px;font-size:.72rem;letter-spacing:1px;white-space:nowrap;}
+.service-price{font-size:2.2rem;font-weight:800;color:var(--purple);margin:1rem 0 .3rem;}
+.service-price span{font-size:1rem;color:var(--muted);font-weight:400;}
+.service-card h3{font-size:1.1rem;font-weight:700;margin-bottom:.5rem;}
+.service-card p{font-size:.85rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.6;}
+.service-features{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem;}
+.service-features li{font-size:.83rem;color:var(--muted);display:flex;align-items:center;gap:.6rem;}
+.service-features li::before{content:'✓';color:var(--teal);font-weight:700;flex-shrink:0;}
+.service-btn{display:block;text-align:center;padding:.75rem;border-radius:8px;text-decoration:none;font-size:.85rem;font-weight:600;transition:all .3s;border:1px solid var(--border);color:var(--text);}
+.service-btn:hover{background:var(--purple);border-color:var(--purple);color:#fff;}
+.service-card.featured .service-btn{background:var(--purple);border-color:var(--purple);color:#fff;}
+.service-card.featured .service-btn:hover{background:var(--pink);border-color:var(--pink);}
+
+/* CONTACT */
+.contact-section{background:var(--bg2);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem;align-items:start;}
+.contact-info{display:flex;flex-direction:column;gap:1.2rem;}
+.contact-item{display:flex;align-items:center;gap:1rem;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.2rem;}
+.contact-item-icon{width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.contact-item-icon.purple{background:rgba(124,111,247,.15);}
+.contact-item-icon.teal{background:rgba(45,212,191,.15);}
+.contact-item-icon.pink{background:rgba(224,80,122,.15);}
+.contact-item-icon.amber{background:rgba(245,158,11,.15);}
+.contact-item h4{font-size:.85rem;color:var(--muted);margin-bottom:.2rem;}
+.contact-item a,.contact-item p{font-size:.9rem;color:var(--text);text-decoration:none;}
+.contact-item a:hover{color:var(--teal);}
+.contact-form{display:flex;flex-direction:column;gap:1rem;}
+.form-group{display:flex;flex-direction:column;gap:.4rem;}
+.form-group label{font-size:.8rem;color:var(--muted);letter-spacing:.5px;}
+.form-group input,.form-group textarea{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.85rem 1rem;color:var(--text);font-family:'Syne',sans-serif;font-size:.9rem;outline:none;transition:border .3s;resize:none;}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--purple);}
+.form-submit{background:var(--purple);color:#fff;border:none;padding:.9rem 2rem;border-radius:8px;font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .3s;align-self:flex-start;}
+.form-submit:hover{background:var(--pink);transform:translateY(-2px);}
+
+/* FOOTER */
+footer{padding:2rem 4rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.footer-logo{font-family:'Space Mono',monospace;font-size:.85rem;color:var(--muted);}
+.footer-logo span{color:var(--teal);}
+.footer-copy{font-size:.78rem;color:var(--muted);}
+.footer-social{display:flex;gap:1rem;}
+.footer-social a{color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .3s;}
+.footer-social a:hover{color:var(--teal);}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links{display:none;}
+  section{padding:4rem 1.5rem;}
+  .hero{padding:0 1.5rem;}
+  .hero-stats{display:none;}
+  .contact-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;gap:1rem;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">GS<span>.</span>dev</div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://www.fiverr.com" class="nav-cta" target="_blank">Hire Me →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-blob"></div>
+  <div class="hero-blob2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Available for Freelance</div>
+    <h1>
+      <span class="name">Ghulam Sarwar</span><br/>
+      <span class="accent">Embedded</span> &amp;<br/>
+      <span class="accent2">Web Developer</span>
+    </h1>
+    <p class="hero-sub">M.Sc. Electrical Engineering &amp; IT student at <strong>THD Deggendorf, Germany</strong>. Building hardware that bridges the physical and digital worlds — from ESP32 firmware to PCB design and modern web apps.</p>
+    <div class="hero-tags">
+      <span class="tag">ESP32</span>
+      <span class="tag">ARM Cortex</span>
+      <span class="tag">PCB Design</span>
+      <span class="tag">IoT</span>
+      <span class="tag">Web Dev</span>
+      <span class="tag">FreeRTOS</span>
+    </div>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">8+</div>
+      <div class="stat-label">Projects</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3+</div>
+      <div class="stat-label">Services</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">🥇</div>
+      <div class="stat-label">Award Winner</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills-section" id="skills">
+  <div class="section-label">What I Know</div>
+  <h2 class="section-title">Skills &amp; <span>Expertise</span></h2>
+  <p class="section-sub">Full-stack hardware and software skills — from soldering a PCB to deploying a web app.</p>
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <div class="skill-icon">⚡</div>
+      <h3>Embedded Systems</h3>
+      <p style="font-size:.85rem;color:var(--muted);line-height:1.6;">Programming microcontrollers and building real-time embedded applications with industry protocols.</p>
+      <div class="skill-tags">
+        <span class="skill-tag">ESP32</span><span class="skill-tag">Arduino</span><span class="skill-tag">ATmega32</span><span class="skill-tag">ARM Cortex</span><span class="skill-tag">FreeRTOS</span><span class="skill-tag">I²C</span><span class="skill-tag">SPI</span><span class="skill-tag">UART</span>
+      </div>
+    </div>
+    <div class="skill-card teal">
+      <div class="skill-icon">🔌</div>
+      <h3>PCB &amp; Circuit Design</h3>
+      <p style="font-size:.85rem;color:var(--muted);line-height:1.6;">Designing schematics and PCB layouts from concept to Gerber files ready for manufacturing.</p>
+      <div class="skill-tags">
+        <span class="skill-tag">KiCad</span><span class="skill-tag">PCB Layout</span><span class="skill-tag">Schematic</span><span class="skill-tag">Gerber</span><span class="skill-tag">LTspice</span><span class="skill-tag">Proteus</span>
+      </div>
+    </div>
+    <div class="skill-card pink">
+      <div class="skill-icon">🌐</div>
+      <h3>Web Development</h3>
+      <p style="font-size:.85rem;color:var(--muted);line-height:1.6;">Building responsive, modern websites and web applications with clean, well-structured code.</p>
+      <div class="skill-tags">
+        <span class="skill-tag">HTML</span><span class="skill-tag">CSS</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Responsive</span><span class="skill-tag">SEO</span>
+      </div>
+    </div>
+    <div class="skill-card amber">
+      <div class="skill-icon">🐍</div>
+      <h3>Software &amp; Tools</h3>
+      <p style="font-size:.85rem;color:var(--muted);line-height:1.6;">Data analysis, automation, and testing tools for embedded and software workflows.</p>
+      <div class="skill-tags">
+        <span class="skill-tag">C/C++</span><span class="skill-tag">Python</span><span class="skill-tag">MATLAB</span><span class="skill-tag">MQTT</span><span class="skill-tag">Git</span><span class="skill-tag">pytest</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" style="background:var(--bg);">
+  <div class="section-label">What I've Built</div>
+  <h2 class="section-title">Featured <span>Projects</span></h2>
+  <p class="section-sub">Real hardware projects — soldered, debugged with oscilloscope, and validated against reference instruments.</p>
+  <div class="projects-grid reveal">
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-num">01 — Embedded</span>
+        <div class="project-links"><a href="https://github.com/ghulam420-sarwar/Smart-Sensor-DAQ" class="project-link" target="_blank">GitHub →</a></div>
+      </div>
+      <div class="project-body">
+        <div class="project-icon">📡</div>
+        <h3>Smart Sensor DAQ System</h3>
+        <p>Data acquisition system using ESP32 with BME280 and DS18B20 sensors. Logs temperature, humidity and pressure via I²C and 1-Wire with Python data pipeline.</p>
+        <div class="project-stack">
+          <span class="stack-tag">ESP32</span><span class="stack-tag teal">I²C</span><span class="stack-tag teal">1-Wire</span><span class="stack-tag pink">Python</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-num">02 — Embedded</span>
+        <div class="project-links"><a href="https://github.com/ghulam420-sarwar/Solar-Monitoring-System" class="project-link" target="_blank">GitHub →</a></div>
+      </div>
+      <div class="project-body">
+        <div class="project-icon">☀️</div>
+        <h3>Solar Monitoring System</h3>
+        <p>Real-time solar panel monitoring with ESP32, INA219 current sensor and OLED display. Publishes data via MQTT for remote monitoring dashboard.</p>
+        <div class="project-stack">
+          <span class="stack-tag">ESP32</span><span class="stack-tag amber">MQTT</span><span class="stack-tag teal">INA219</span><span class="stack-tag pink">OLED</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-num">03 — PCB Design</span>
+        <div class="project-links"><a href="https://github.com/ghulam420-sarwar/Wearable-Health-Monitor" class="project-link" target="_blank">GitHub →</a></div>
+      </div>
+      <div class="project-body">
+        <div class="project-icon">❤️</div>
+        <h3>Wearable Health Monitor</h3>
+        <p>Custom PCB design for wearable health monitor using ESP32-C3 with MAX30102 pulse oximeter and MLX90614 IR thermometer. Full KiCad schematic and layout.</p>
+        <div class="project-stack">
+          <span class="stack-tag">ESP32-C3</span><span class="stack-tag teal">KiCad PCB</span><span class="stack-tag pink">MAX30102</span><span class="stack-tag amber">Gerber</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-num">04 — IoT</span>
+        <div class="project-links"><a href="https://github.com/ghulam420-sarwar/Smart-Home-Automation" class="project-link" target="_blank">GitHub →</a></div>
+      </div>
+      <div class="project-body">
+        <div class="project-icon">🏠</div>
+        <h3>Smart Home Automation</h3>
+        <p>ESP32-based home automation with DHT22 sensor and 4-channel relay module. Controls appliances via MQTT automation rules with real-time monitoring.</p>
+        <div class="project-stack">
+          <span class="stack-tag">ESP32</span><span class="stack-tag amber">MQTT</span><span class="stack-tag teal">DHT22</span><span class="stack-tag pink">Relay</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-num">05 — Web Dev</span>
+        <div class="project-links"><a href="#" class="project-link">Live →</a></div>
+      </div>
+      <div class="project-body">
+        <div class="project-icon">🛒</div>
+        <h3>E-Commerce Landing Page</h3>
+        <p>Modern responsive e-commerce landing page with product showcase, animated hero section, shopping cart UI and mobile-first design. Clean HTML/CSS/JS.</p>
+        <div class="project-stack">
+          <span class="stack-tag teal">HTML5</span><span class="stack-tag teal">CSS3</span><span class="stack-tag pink">JavaScript</span><span class="stack-tag amber">Responsive</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-num">06 — Web Dev</span>
+        <div class="project-links"><a href="#" class="project-link">Live →</a></div>
+      </div>
+      <div class="project-body">
+        <div class="project-icon">📊</div>
+        <h3>IoT Dashboard UI</h3>
+        <p>Real-time IoT sensor dashboard with live chart updates, dark theme, and responsive layout. Displays temperature, humidity and power data from MQTT broker.</p>
+        <div class="project-stack">
+          <span class="stack-tag teal">HTML5</span><span class="stack-tag teal">CSS3</span><span class="stack-tag pink">JavaScript</span><span class="stack-tag amber">Chart.js</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-num">07 — Circuit Design</span>
+        <div class="project-links"><a href="#" class="project-link">Preview →</a></div>
+      </div>
+      <div class="project-body">
+        <div class="project-icon">🔋</div>
+        <h3>Li-Ion Battery Charger PCB</h3>
+        <p>Designed a compact 2-layer Li-Ion battery charger PCB using TP4056 IC with protection circuit. Includes USB-C input, LED status indicators and Gerber files.</p>
+        <div class="project-stack">
+          <span class="stack-tag">KiCad</span><span class="stack-tag teal">2-Layer PCB</span><span class="stack-tag pink">TP4056</span><span class="stack-tag amber">Gerber</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-num">08 — Circuit Design</span>
+        <div class="project-links"><a href="#" class="project-link">Preview →</a></div>
+      </div>
+      <div class="project-body">
+        <div class="project-icon">📶</div>
+        <h3>ESP32 Breakout Board</h3>
+        <p>Custom ESP32 breakout board with voltage regulator, USB-to-UART, reset circuit and labeled GPIO headers. Designed for rapid prototyping with clean PCB layout.</p>
+        <div class="project-stack">
+          <span class="stack-tag">ESP32</span><span class="stack-tag teal">PCB Design</span><span class="stack-tag pink">KiCad</span><span class="stack-tag amber">Prototyping</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="achievements-section" id="achievements">
+  <div class="section-label">Recognition</div>
+  <h2 class="section-title">Awards &amp; <span>Achievements</span></h2>
+  <div class="achievements-grid reveal">
+    <div class="achievement-card">
+      <div class="achievement-icon">🥇</div>
+      <div>
+        <h4>Winner — DICE AFS 2021</h4>
+        <p>AI Agronomist project won first place with PKR 100,000 prize. Built a CNN-based plant disease recognition system.</p>
+      </div>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">🥉</div>
+      <div>
+        <h4>2nd Runner-up — Hult Prize 2022</h4>
+        <p>International social entrepreneurship competition. One of the most prestigious student competitions globally.</p>
+      </div>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">🧠</div>
+      <div>
+        <h4>97.6% CNN Accuracy</h4>
+        <p>Achieved 97.6% validation accuracy on plant recognition model using VGG-16 architecture with TensorFlow.</p>
+      </div>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">🎓</div>
+      <div>
+        <h4>M.Sc. at THD Germany</h4>
+        <p>Currently pursuing Masters in Electrical Engineering &amp; IT at Deggendorf Institute of Technology, Germany.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="background:var(--bg);">
+  <div class="section-label">What I Offer</div>
+  <h2 class="section-title">Freelance <span>Services</span></h2>
+  <p class="section-sub">Available on Fiverr and Upwork. Transparent pricing, fast delivery, professional quality.</p>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <h3>⚡ Embedded Systems</h3>
+      <div class="service-price">€15 <span>/ starting</span></div>
+      <p>ESP32, Arduino &amp; ARM microcontroller programming for your IoT and embedded projects.</p>
+      <ul class="service-features">
+        <li>ESP32 / Arduino / ARM programming</li>
+        <li>Sensor integration &amp; IoT</li>
+        <li>WiFi, Bluetooth, MQTT</li>
+        <li>FreeRTOS applications</li>
+        <li>Well-documented code</li>
+      </ul>
+      <a href="https://www.fiverr.com" class="service-btn" target="_blank">Order on Fiverr</a>
+    </div>
+    <div class="service-card featured">
+      <div class="featured-badge">⭐ Most Popular</div>
+      <h3>🔌 PCB Design</h3>
+      <div class="service-price">€20 <span>/ starting</span></div>
+      <p>Professional circuit schematic and PCB layout design, manufacture-ready Gerber files included.</p>
+      <ul class="service-features">
+        <li>Circuit schematic design</li>
+        <li>PCB layout (1 &amp; 2 layer)</li>
+        <li>Gerber files for manufacturing</li>
+        <li>Bill of Materials (BOM)</li>
+        <li>3D PCB preview</li>
+      </ul>
+      <a href="https://www.fiverr.com" class="service-btn" target="_blank">Order on Fiverr</a>
+    </div>
+    <div class="service-card">
+      <h3>🌐 Web Development</h3>
+      <div class="service-price">€20 <span>/ starting</span></div>
+      <p>Responsive, modern websites and landing pages built with clean HTML, CSS and JavaScript.</p>
+      <ul class="service-features">
+        <li>Responsive design (mobile+desktop)</li>
+        <li>HTML / CSS / JavaScript</li>
+        <li>SEO optimized structure</li>
+        <li>Contact forms &amp; animations</li>
+        <li>Fast loading &amp; clean code</li>
+      </ul>
+      <a href="https://www.fiverr.com" class="service-btn" target="_blank">Order on Fiverr</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-label">Get In Touch</div>
+  <h2 class="section-title">Let's Work <span>Together</span></h2>
+  <p class="section-sub">Have a project in mind? I'd love to hear about it. Send me a message and I'll get back to you!</p>
+  <div class="contact-grid reveal">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-item-icon purple">📧</div>
+        <div>
+          <h4>Email</h4>
+          <a href="mailto:g.sarwar.be16@gmail.com">g.sarwar.be16@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon teal">📍</div>
+        <div>
+          <h4>Location</h4>
+          <p>Deggendorf, Bavaria, Germany</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon pink">💼</div>
+        <div>
+          <h4>Fiverr</h4>
+          <a href="https://www.fiverr.com" target="_blank">fiverr.com/sarwarembedded</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon amber">🐙</div>
+        <div>
+          <h4>GitHub</h4>
+          <a href="https://github.com/ghulam420-sarwar" target="_blank">github.com/ghulam420-sarwar</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon purple">🔗</div>
+        <div>
+          <h4>LinkedIn</h4>
+          <a href="https://www.linkedin.com/in/ghulam420-sarwar" target="_blank">linkedin.com/in/ghulam420-sarwar</a>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="John Doe"/>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="john@example.com"/>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" placeholder="Project Inquiry"/>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea rows="5" placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button class="form-submit">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">GS<span>.dev</span> — Ghulam Sarwar</div>
+  <div class="footer-copy">© 2025 · THD Deggendorf, Germany</div>
+  <div class="footer-social">
+    <a href="https://github.com/ghulam420-sarwar" target="_blank">GitHub</a>
+    <a href="https://www.linkedin.com/in/ghulam420-sarwar" target="_blank">LinkedIn</a>
+    <a href="https://www.fiverr.com" target="_blank">Fiverr</a>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); }});
+}, {threshold: 0.1});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
